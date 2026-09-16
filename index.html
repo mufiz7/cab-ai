@@ -38,7 +38,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px 16px;
+      padding: 20px 16px 80px 16px;
       overflow-x: hidden;
       position: relative;
     }
@@ -148,19 +148,19 @@
       font-size: 14px;
       line-height: 1.5;
       font-weight: 400;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .call-action-box {
       background: var(--card-inner);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 28px 16px;
+      padding: 24px 16px;
       margin-bottom: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .soundwave-container {
@@ -225,13 +225,6 @@
     .feature-chip .subtitle {
       font-size: 11px;
       color: var(--gray-400);
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 12px;
-      color: var(--gray-600);
-      padding: 8px;
     }
 
     @media (max-width: 380px) {
@@ -299,20 +292,19 @@
         </div>
       </div>
     </main>
-
   </div>
 
-  <!-- Official Vapi Web Widget Script -->
+  <!-- Official Vapi Web Widget Script with Center Bottom Placement -->
   <script>
     var vapiInstance = null;
-    const assistantId = "507300fa-58cc-4497-8a8e-98b955e62e49";
+    const assistantId = "507300fa-58cc-4497-8a8e-98b955e62c49";
     const apiKey = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
 
     const buttonConfig = {
-      position: "bottom-right",
+      position: "bottom",
       offset: "24px",
-      width: "64px",
-      height: "64px",
+      width: "68px",
+      height: "68px",
       idle: {
         color: `rgb(255, 255, 255)`,
         type: "pill",
