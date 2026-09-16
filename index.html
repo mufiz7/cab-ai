@@ -124,4 +124,317 @@
     }
 
     .card {
-      background: var(
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 32px 24px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+    }
+
+    .card h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .card p.desc {
+      color: var(--gray-400);
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+
+    .call-action-box {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .soundwave-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 36px;
+    }
+
+    .bar {
+      width: 3.5px;
+      background: var(--gray-600);
+      border-radius: 99px;
+      height: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .calling .bar {
+      background: var(--white);
+      animation: sound-bounce 1s infinite ease-in-out alternate;
+    }
+
+    .calling .bar:nth-child(1) { animation-delay: 0.1s; }
+    .calling .bar:nth-child(2) { animation-delay: 0.25s; }
+    .calling .bar:nth-child(3) { animation-delay: 0.15s; }
+    .calling .bar:nth-child(4) { animation-delay: 0.35s; }
+    .calling .bar:nth-child(5) { animation-delay: 0.2s; }
+    .calling .bar:nth-child(6) { animation-delay: 0.3s; }
+    .calling .bar:nth-child(7) { animation-delay: 0.05s; }
+
+    @keyframes sound-bounce {
+      0% { height: 6px; }
+      100% { height: 28px; }
+    }
+
+    .hero-call-btn {
+      width: 100%;
+      max-width: 250px;
+      padding: 16px 24px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hero-call-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-call-btn:active {
+      transform: scale(0.98);
+    }
+
+    .hero-call-btn.active-call {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 10px 25px var(--red-glow);
+    }
+
+    .call-status-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-400);
+      min-height: 20px;
+    }
+
+    .call-status-label.active {
+      color: var(--white);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .feature-chip {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .feature-chip .title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .feature-chip .subtitle {
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+
+    /* Completely move the default floating Vapi button off-screen */
+    .vapi-btn,
+    #vapi-support-btn {
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    @media (max-width: 380px) {
+      .card {
+        padding: 24px 18px;
+      }
+      .card h1 {
+        font-size: 24px;
+      }
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header class="brand-header">
+      <div class="logo">
+        <div class="logo-icon">🚕</div>
+        <span>CAB AI</span>
+      </div>
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span>Voice Live</span>
+      </div>
+    </header>
+
+    <main class="card">
+      <h1>Instant Cab Booking</h1>
+      <p class="desc">Speak naturally with our 24/7 AI voice receptionist to reserve rides, check fares, and receive instant confirmations.</p>
+
+      <div class="call-action-box" id="actionBox">
+        <div class="soundwave-container">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+
+        <button class="hero-call-btn" id="heroCallBtn">
+          <span id="heroBtnIcon">📞</span>
+          <span id="heroBtnText">Call CAB AI</span>
+        </button>
+
+        <div class="call-status-label" id="statusLabel">Ready to connect</div>
+      </div>
+
+      <div class="features">
+        <div class="feature-chip">
+          <div class="title">⚡ Sub-Second AI</div>
+          <div class="subtitle">Ultra-fast voice response</div>
+        </div>
+        <div class="feature-chip">
+          <div class="title">📅 Auto Sync</div>
+          <div class="subtitle">Google Calendar & Sheets</div>
+        </div>
+        <div class="feature-chip">
+          <div class="title">🌐 Free Web Call</div>
+          <div class="subtitle">No phone bill charges</div>
+        </div>
+        <div class="feature-chip">
+          <div class="title">🔒 Instant Booking</div>
+          <div class="subtitle">Automated ride dispatch</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Official Vapi Web Widget Script -->
+  <script>
+    const ASSISTANT_ID = "507300fa-58cc-4497-8a8e-98b955e62e49";
+    const PUBLIC_KEY = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
+
+    const heroCallBtn = document.getElementById('heroCallBtn');
+    const heroBtnIcon = document.getElementById('heroBtnIcon');
+    const heroBtnText = document.getElementById('heroBtnText');
+    const actionBox = document.getElementById('actionBox');
+    const statusLabel = document.getElementById('statusLabel');
+
+    let vapiInstance = null;
+
+    (function(d, t) {
+      const g = d.createElement(t);
+      const s = d.getElementsByTagName(t)[0];
+      g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.async = true;
+      g.onload = function() {
+        if (window.vapiSDK && typeof window.vapiSDK.run === 'function') {
+          vapiInstance = window.vapiSDK.run({
+            apiKey: PUBLIC_KEY,
+            assistant: ASSISTANT_ID,
+            config: {
+              position: "bottom-right",
+              offset: "20px",
+              width: "50px",
+              height: "50px"
+            }
+          });
+          watchVapiState();
+        }
+      };
+      s.parentNode.insertBefore(g, s);
+    })(document, "script");
+
+    function watchVapiState() {
+      const checkInterval = setInterval(() => {
+        const vapiBtn = document.querySelector('.vapi-btn, #vapi-support-btn');
+        if (vapiBtn) {
+          clearInterval(checkInterval);
+          const observer = new MutationObserver(() => {
+            if (vapiBtn.classList.contains('vapi-btn-is-active')) {
+              actionBox.classList.add('calling');
+              heroCallBtn.classList.add('active-call');
+              heroBtnIcon.textContent = '⏹';
+              heroBtnText.textContent = 'End Call';
+              statusLabel.textContent = vapiBtn.classList.contains('vapi-btn-is-speaking')
+                ? '🗣 CAB AI is speaking...'
+                : '🎙 Listening to you...';
+              statusLabel.classList.add('active');
+            } else if (vapiBtn.classList.contains('vapi-btn-is-loading')) {
+              actionBox.classList.remove('calling');
+              heroCallBtn.classList.remove('active-call');
+              heroBtnIcon.textContent = '⏳';
+              heroBtnText.textContent = 'Connecting...';
+              statusLabel.textContent = 'Connecting to CAB AI...';
+            } else {
+              actionBox.classList.remove('calling');
+              heroCallBtn.classList.remove('active-call');
+              heroBtnIcon.textContent = '📞';
+              heroBtnText.textContent = 'Call CAB AI';
+              statusLabel.textContent = 'Ready to connect';
+              statusLabel.classList.remove('active');
+            }
+          });
+          observer.observe(vapiBtn, { attributes: true, attributeFilter: ['class'] });
+        }
+      }, 100);
+    }
+
+    heroCallBtn.addEventListener('click', () => {
+      const vapiBtn = document.querySelector('.vapi-btn, #vapi-support-btn');
+      if (vapiBtn) {
+        vapiBtn.click();
+      } else if (vapiInstance && typeof vapiInstance.start === 'function') {
+        vapiInstance.start(ASSISTANT_ID);
+      } else {
+        statusLabel.textContent = 'Connecting... Please wait a moment';
+      }
+    });
+  </script>
+</body>
+</html>
