@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CAB AI • Executive Voice Booking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000000;
+      --card-bg: #0C0C0E;
+      --card-inner: #141418;
+      --border: #242429;
+      --border-light: #383842;
+      --white: #FFFFFF;
+      --gray-100: #F4F4F5;
+      --gray-400: #A1A1AA;
+      --gray-600: #52525B;
+      --gray-800: #27272A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 600px;
+      height: 350px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 8px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--white);
+      color: var(--black);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-400);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--white);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+      animation: blink 2.5s infinite ease-in-out;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 32px 24px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+    }
+
+    .card h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .card p.desc {
+      color: var(--gray-400);
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+
+    .call-action-box {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 16px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .soundwave-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 36px;
+    }
+
+    .bar {
+      width: 3px;
+      background: var(--gray-600);
+      border-radius: 99px;
+      height: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .call-action-box:hover .bar {
+      background: var(--white);
+    }
+
+    .call-action-box:hover .bar:nth-child(1) { height: 18px; }
+    .call-action-box:hover .bar:nth-child(2) { height: 30px; }
+    .call-action-box:hover .bar:nth-child(3) { height: 22px; }
+    .call-action-box:hover .bar:nth-child(4) { height: 34px; }
+    .call-action-box:hover .bar:nth-child(5) { height: 16px; }
+    .call-action-box:hover .bar:nth-child(6) { height: 26px; }
+    .call-action-box:hover .bar:nth-child(7) { height: 12px; }
+
+    .action-instruction {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-400);
+    }
+
+    .action-instruction strong {
+      color: var(--white);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .feature-chip {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .feature-chip .title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .feature-chip .subtitle {
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-600);
+      padding: 8px;
+    }
+
+    @media (max-width: 380px) {
+      .card {
+        padding: 24px 18px;
+      }
+      .card h1 {
+        font-size: 24px;
+      }
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header class="brand-header">
+      <div class="logo">
+        <div class="logo-icon">🚕</div>
+        <span>CAB AI</span>
+      </div>
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span>Voice Live</span>
+      </div>
+    </header>
+
+    <main class="card">
+      <h1>Instant Cab Booking</h1>
+      <p class="desc">Speak naturally with our 24/7 AI voice receptionist to reserve rides, check fares, and receive instant confirmations.</p>
+
+      <div class="call-action-box">
+        <div class="soundwave-container">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <div class="action-instruction">
+          Tap the <strong>Call Button</strong> below to start
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feature-chip">
+          <div class="title">⚡ Sub-Second AI</div>
+          <div class="subtitle">Ultra-fast voice response</div>
+        </div>
+        <div class="feature-chip">
+          <div class="title">📅 Auto Sync</div>
+          <div class="subtitle">Google Calendar & Sheets</div>
+        </div>
+        <div class="feature-chip">
+          <div class="title">🌐 Free Web Call</div>
+          <div class="subtitle">No phone bill charges</div>
+        </div>
+        <div class="feature-chip">
+          <div class="title">🔒 Instant Booking</div>
+          <div class="subtitle">Automated ride dispatch</div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      Powered by Vapi AI • 100% Automated Taxi Dispatch
+    </footer>
+  </div>
+
+  <script>
+    var vapiInstance = null;
+    const assistantId = "507300fa-58cc-4497-8a8e-98b955e62c49";
+    const apiKey = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
+
+    const buttonConfig = {
+      position: "bottom-right",
+      offset: "24px",
+      width: "64px",
+      height: "64px",
+      idle: {
+        color: `rgb(255, 255, 255)`,
+        type: "pill",
+        title: "Call CAB AI",
+        subtitle: "Tap to Speak",
+        icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
+      },
+      loading: {
+        color: `rgb(161, 161, 170)`,
+        type: "pill",
+        title: "Connecting...",
+        subtitle: "Please wait",
+        icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
+      },
+      active: {
+        color: `rgb(239, 68, 68)`,
+        type: "pill",
+        title: "End Call",
+        subtitle: "Talking to AI",
+        icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg`,
+      },
+    };
+
+    (function (d, t) {
+      var g = document.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+      g.src =
+        "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.defer = true;
+      g.async = true;
+      s.parentNode.insertBefore(g, s);
+      g.onload = function () {
+        vapiInstance = window.vapiSDK.run({
+          apiKey: apiKey,
+          assistant: assistantId,
+          config: buttonConfig,
+        });
+      };
+    })(document, "script");
+  </script>
+</body>
+</html>
