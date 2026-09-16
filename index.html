@@ -19,6 +19,8 @@
       --gray-400: #A1A1AA;
       --gray-600: #52525B;
       --gray-800: #27272A;
+      --red: #EF4444;
+      --red-glow: rgba(239, 68, 68, 0.4);
     }
 
     * {
@@ -38,7 +40,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px 16px 80px 16px;
+      padding: 24px 16px;
       overflow-x: hidden;
       position: relative;
     }
@@ -154,13 +156,14 @@
     .call-action-box {
       background: var(--card-inner);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px 16px;
+      border-radius: 22px;
+      padding: 24px 18px;
       margin-bottom: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
+      position: relative;
     }
 
     .soundwave-container {
@@ -168,7 +171,7 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      height: 36px;
+      height: 32px;
     }
 
     .bar {
@@ -176,28 +179,70 @@
       background: var(--gray-600);
       border-radius: 99px;
       height: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
-    .call-action-box:hover .bar {
+    .calling .bar {
       background: var(--white);
+      animation: sound-bounce 1s infinite ease-in-out alternate;
     }
 
-    .call-action-box:hover .bar:nth-child(1) { height: 18px; }
-    .call-action-box:hover .bar:nth-child(2) { height: 30px; }
-    .call-action-box:hover .bar:nth-child(3) { height: 22px; }
-    .call-action-box:hover .bar:nth-child(4) { height: 34px; }
-    .call-action-box:hover .bar:nth-child(5) { height: 16px; }
-    .call-action-box:hover .bar:nth-child(6) { height: 26px; }
-    .call-action-box:hover .bar:nth-child(7) { height: 12px; }
+    .calling .bar:nth-child(1) { animation-delay: 0.1s; }
+    .calling .bar:nth-child(2) { animation-delay: 0.25s; }
+    .calling .bar:nth-child(3) { animation-delay: 0.15s; }
+    .calling .bar:nth-child(4) { animation-delay: 0.35s; }
+    .calling .bar:nth-child(5) { animation-delay: 0.2s; }
+    .calling .bar:nth-child(6) { animation-delay: 0.3s; }
+    .calling .bar:nth-child(7) { animation-delay: 0.05s; }
 
-    .action-instruction {
+    @keyframes sound-bounce {
+      0% { height: 6px; }
+      100% { height: 28px; }
+    }
+
+    .hero-call-btn {
+      width: 100%;
+      max-width: 260px;
+      padding: 16px 24px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hero-call-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-call-btn:active {
+      transform: scale(0.98);
+    }
+
+    .hero-call-btn.active-call {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 10px 25px var(--red-glow);
+    }
+
+    .call-status-label {
       font-size: 13px;
       font-weight: 500;
       color: var(--gray-400);
+      min-height: 20px;
     }
 
-    .action-instruction strong {
+    .call-status-label.active {
       color: var(--white);
     }
 
@@ -258,7 +303,7 @@
       <h1>Instant Cab Booking</h1>
       <p class="desc">Speak naturally with our 24/7 AI voice receptionist to reserve rides, check fares, and receive instant confirmations.</p>
 
-      <div class="call-action-box">
+      <div class="call-action-box" id="actionBox">
         <div class="soundwave-container">
           <div class="bar"></div>
           <div class="bar"></div>
@@ -268,9 +313,13 @@
           <div class="bar"></div>
           <div class="bar"></div>
         </div>
-        <div class="action-instruction">
-          Tap the <strong>Call Button</strong> below to start
-        </div>
+
+        <button class="hero-call-btn" id="heroCallBtn">
+          <span id="heroBtnIcon">📞</span>
+          <span id="heroBtnText">Call CAB AI</span>
+        </button>
+
+        <div class="call-status-label" id="statusLabel">Ready to connect</div>
       </div>
 
       <div class="features">
@@ -294,39 +343,18 @@
     </main>
   </div>
 
-  <!-- Official Vapi Web Widget Script with Center Bottom Placement -->
   <script>
     var vapiInstance = null;
     const assistantId = "507300fa-58cc-4497-8a8e-98b955e62c49";
     const apiKey = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
 
-    const buttonConfig = {
-      position: "bottom",
-      offset: "24px",
-      width: "68px",
-      height: "68px",
-      idle: {
-        color: `rgb(255, 255, 255)`,
-        type: "pill",
-        title: "Call CAB AI",
-        subtitle: "Tap to Speak",
-        icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
-      },
-      loading: {
-        color: `rgb(161, 161, 170)`,
-        type: "pill",
-        title: "Connecting...",
-        subtitle: "Please wait",
-        icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
-      },
-      active: {
-        color: `rgb(239, 68, 68)`,
-        type: "pill",
-        title: "End Call",
-        subtitle: "Talking to AI",
-        icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg`,
-      },
-    };
+    const heroCallBtn = document.getElementById('heroCallBtn');
+    const heroBtnIcon = document.getElementById('heroBtnIcon');
+    const heroBtnText = document.getElementById('heroBtnText');
+    const actionBox = document.getElementById('actionBox');
+    const statusLabel = document.getElementById('statusLabel');
+
+    let isCallLive = false;
 
     (function (d, t) {
       var g = document.createElement(t),
@@ -340,10 +368,81 @@
         vapiInstance = window.vapiSDK.run({
           apiKey: apiKey,
           assistant: assistantId,
-          config: buttonConfig,
+          config: {
+            position: "bottom",
+            offset: "10px",
+            width: "56px",
+            height: "56px",
+            idle: {
+              color: `rgb(255, 255, 255)`,
+              type: "pill",
+              title: "Call CAB AI",
+              subtitle: "Tap to Speak",
+              icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
+            },
+            loading: {
+              color: `rgb(161, 161, 170)`,
+              type: "pill",
+              title: "Connecting...",
+              subtitle: "Please wait",
+              icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
+            },
+            active: {
+              color: `rgb(239, 68, 68)`,
+              type: "pill",
+              title: "End Call",
+              subtitle: "Talking to AI",
+              icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg`,
+            },
+          }
         });
+
+        if (vapiInstance) {
+          vapiInstance.on('call-start', () => {
+            isCallLive = true;
+            actionBox.classList.add('calling');
+            heroCallBtn.classList.add('active-call');
+            heroBtnIcon.textContent = '⏹';
+            heroBtnText.textContent = 'End Call';
+            statusLabel.textContent = '● Connected: Speaking with CAB AI';
+            statusLabel.classList.add('active');
+          });
+
+          vapiInstance.on('call-end', () => {
+            isCallLive = false;
+            actionBox.classList.remove('calling');
+            heroCallBtn.classList.remove('active-call');
+            heroBtnIcon.textContent = '📞';
+            heroBtnText.textContent = 'Call CAB AI';
+            statusLabel.textContent = 'Call Ended. Ready to connect.';
+            statusLabel.classList.remove('active');
+          });
+
+          vapiInstance.on('speech-start', () => {
+            statusLabel.textContent = '🗣 CAB AI is speaking...';
+          });
+
+          vapiInstance.on('speech-end', () => {
+            statusLabel.textContent = '🎙 Listening to you...';
+          });
+
+          vapiInstance.on('error', (err) => {
+            console.error('Call Error:', err);
+            statusLabel.textContent = 'Error connecting. Please try again.';
+          });
+        }
       };
     })(document, "script");
+
+    heroCallBtn.addEventListener('click', () => {
+      if (!vapiInstance) return;
+      if (!isCallLive) {
+        statusLabel.textContent = 'Connecting...';
+        vapiInstance.start(assistantId);
+      } else {
+        vapiInstance.stop();
+      }
+    });
   </script>
 </body>
 </html>
