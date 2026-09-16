@@ -271,15 +271,14 @@
       color: var(--gray-400);
     }
 
-    #vapi-support-btn,
-    [class*="vapi-btn"],
-    [id*="vapi-btn"],
-    div[class*="vapi-btn-container"],
-    button[style*="position: fixed"],
-    div[style*="position: fixed"]:not(#app):not(.wrapper) {
-      display: none !important;
+    .vapi-btn,
+    #vapi-support-btn {
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      width: 1px !important;
+      height: 1px !important;
       opacity: 0 !important;
-      visibility: hidden !important;
       pointer-events: none !important;
     }
 
@@ -354,8 +353,6 @@
     </main>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
-
   <script>
     const ASSISTANT_ID = "507300fa-58cc-4497-8a8e-98b955e62c49";
     const PUBLIC_KEY = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
@@ -366,24 +363,79 @@
     const actionBox = document.getElementById('actionBox');
     const statusLabel = document.getElementById('statusLabel');
 
-    let vapi = null;
-    let isCallLive = false;
+    let vapiInstance = null;
 
-    function getVapiClient() {
-      if (vapi) return vapi;
-      if (window.vapiSDK && window.vapiSDK.vapi) {
-        vapi = window.vapiSDK.vapi;
-      }
-      return vapi;
+    (function(d, t) {
+      const g = d.createElement(t);
+      const s = d.getElementsByTagName(t)[0];
+      g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.async = true;
+      g.onload = function() {
+        if (window.vapiSDK && typeof window.vapiSDK.run === 'function') {
+          vapiInstance = window.vapiSDK.run({
+            apiKey: PUBLIC_KEY,
+            assistant: ASSISTANT_ID,
+            config: {
+              position: "bottom-right",
+              offset: "20px",
+              width: "50px",
+              height: "50px"
+            }
+          });
+
+          watchVapiState();
+        }
+      };
+      s.parentNode.insertBefore(g, s);
+    })(document, "script");
+
+    function watchVapiState() {
+      const checkInterval = setInterval(() => {
+        const vapiBtn = document.querySelector('.vapi-btn, #vapi-support-btn');
+        if (vapiBtn) {
+          clearInterval(checkInterval);
+
+          const observer = new MutationObserver(() => {
+            if (vapiBtn.classList.contains('vapi-btn-is-active')) {
+              actionBox.classList.add('calling');
+              heroCallBtn.classList.add('active-call');
+              heroBtnIcon.textContent = '⏹';
+              heroBtnText.textContent = 'End Call';
+              statusLabel.textContent = vapiBtn.classList.contains('vapi-btn-is-speaking') 
+                ? '🗣 CAB AI is speaking...' 
+                : '🎙 Listening to you...';
+              statusLabel.classList.add('active');
+            } else if (vapiBtn.classList.contains('vapi-btn-is-loading')) {
+              actionBox.classList.remove('calling');
+              heroCallBtn.classList.remove('active-call');
+              heroBtnIcon.textContent = '⏳';
+              heroBtnText.textContent = 'Connecting...';
+              statusLabel.textContent = 'Connecting to CAB AI...';
+            } else {
+              actionBox.classList.remove('calling');
+              heroCallBtn.classList.remove('active-call');
+              heroBtnIcon.textContent = '📞';
+              heroBtnText.textContent = 'Call CAB AI';
+              statusLabel.textContent = 'Ready to connect';
+              statusLabel.classList.remove('active');
+            }
+          });
+
+          observer.observe(vapiBtn, { attributes: true, attributeFilter: ['class'] });
+        }
+      }, 100);
     }
 
-    function setupEventListeners(client) {
-      if (!client || client._hasSetupListeners) return;
-      client._hasSetupListeners = true;
-
-      client.on('call-start', () => {
-        isCallLive = true;
-        actionBox.classList.add('calling');
-        heroCallBtn.classList.add('active-call');
-        heroBtnIcon.textContent = '⏹';
-        heroBtnText.textContent =
+    heroCallBtn.addEventListener('click', () => {
+      const vapiBtn = document.querySelector('.vapi-btn, #vapi-support-btn');
+      if (vapiBtn) {
+        vapiBtn.click();
+      } else if (vapiInstance && typeof vapiInstance.start === 'function') {
+        vapiInstance.start(ASSISTANT_ID);
+      } else {
+        statusLabel.textContent = 'Connecting... Please wait a moment';
+      }
+    });
+  </script>
+</body>
+</html>
