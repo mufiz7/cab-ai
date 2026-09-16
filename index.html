@@ -13,14 +13,13 @@
       --card-bg: #0C0C0E;
       --card-inner: #141418;
       --border: #242429;
-      --border-light: #383842;
       --white: #FFFFFF;
       --gray-100: #F4F4F5;
       --gray-400: #A1A1AA;
       --gray-600: #52525B;
       --gray-800: #27272A;
-      --red: #EF4444;
-      --red-glow: rgba(239, 68, 68, 0.4);
+      --red: #DC2626;
+      --red-glow: rgba(220, 38, 38, 0.4);
     }
 
     * {
@@ -64,7 +63,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      z-index: 1;
+      z-index: 10;
     }
 
     .brand-header {
@@ -157,7 +156,7 @@
       background: var(--card-inner);
       border: 1px solid var(--border);
       border-radius: 22px;
-      padding: 24px 18px;
+      padding: 26px 20px;
       margin-bottom: 24px;
       display: flex;
       flex-direction: column;
@@ -170,12 +169,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      height: 32px;
+      gap: 5px;
+      height: 36px;
     }
 
     .bar {
-      width: 3px;
+      width: 3.5px;
       background: var(--gray-600);
       border-radius: 99px;
       height: 8px;
@@ -202,7 +201,7 @@
 
     .hero-call-btn {
       width: 100%;
-      max-width: 260px;
+      max-width: 250px;
       padding: 16px 24px;
       background: var(--white);
       color: var(--black);
@@ -270,6 +269,18 @@
     .feature-chip .subtitle {
       font-size: 11px;
       color: var(--gray-400);
+    }
+
+    #vapi-support-btn,
+    [class*="vapi-btn"],
+    [id*="vapi-btn"],
+    div[class*="vapi-btn-container"],
+    button[style*="position: fixed"],
+    div[style*="position: fixed"]:not(#app):not(.wrapper) {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
 
     @media (max-width: 380px) {
@@ -343,10 +354,11 @@
     </main>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+
   <script>
-    var vapiInstance = null;
-    const assistantId = "507300fa-58cc-4497-8a8e-98b955e62c49";
-    const apiKey = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
+    const ASSISTANT_ID = "507300fa-58cc-4497-8a8e-98b955e62c49";
+    const PUBLIC_KEY = "62b21169-577b-47b7-b11b-4f5501a3fc2f";
 
     const heroCallBtn = document.getElementById('heroCallBtn');
     const heroBtnIcon = document.getElementById('heroBtnIcon');
@@ -354,95 +366,24 @@
     const actionBox = document.getElementById('actionBox');
     const statusLabel = document.getElementById('statusLabel');
 
+    let vapi = null;
     let isCallLive = false;
 
-    (function (d, t) {
-      var g = document.createElement(t),
-        s = d.getElementsByTagName(t)[0];
-      g.src =
-        "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-      g.defer = true;
-      g.async = true;
-      s.parentNode.insertBefore(g, s);
-      g.onload = function () {
-        vapiInstance = window.vapiSDK.run({
-          apiKey: apiKey,
-          assistant: assistantId,
-          config: {
-            position: "bottom",
-            offset: "10px",
-            width: "56px",
-            height: "56px",
-            idle: {
-              color: `rgb(255, 255, 255)`,
-              type: "pill",
-              title: "Call CAB AI",
-              subtitle: "Tap to Speak",
-              icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
-            },
-            loading: {
-              color: `rgb(161, 161, 170)`,
-              type: "pill",
-              title: "Connecting...",
-              subtitle: "Please wait",
-              icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
-            },
-            active: {
-              color: `rgb(239, 68, 68)`,
-              type: "pill",
-              title: "End Call",
-              subtitle: "Talking to AI",
-              icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg`,
-            },
-          }
-        });
-
-        if (vapiInstance) {
-          vapiInstance.on('call-start', () => {
-            isCallLive = true;
-            actionBox.classList.add('calling');
-            heroCallBtn.classList.add('active-call');
-            heroBtnIcon.textContent = '⏹';
-            heroBtnText.textContent = 'End Call';
-            statusLabel.textContent = '● Connected: Speaking with CAB AI';
-            statusLabel.classList.add('active');
-          });
-
-          vapiInstance.on('call-end', () => {
-            isCallLive = false;
-            actionBox.classList.remove('calling');
-            heroCallBtn.classList.remove('active-call');
-            heroBtnIcon.textContent = '📞';
-            heroBtnText.textContent = 'Call CAB AI';
-            statusLabel.textContent = 'Call Ended. Ready to connect.';
-            statusLabel.classList.remove('active');
-          });
-
-          vapiInstance.on('speech-start', () => {
-            statusLabel.textContent = '🗣 CAB AI is speaking...';
-          });
-
-          vapiInstance.on('speech-end', () => {
-            statusLabel.textContent = '🎙 Listening to you...';
-          });
-
-          vapiInstance.on('error', (err) => {
-            console.error('Call Error:', err);
-            statusLabel.textContent = 'Error connecting. Please try again.';
-          });
-        }
-      };
-    })(document, "script");
-
-    heroCallBtn.addEventListener('click', () => {
-      if (!vapiInstance) return;
-      if (!isCallLive) {
-        statusLabel.textContent = 'Connecting...';
-        vapiInstance.start(assistantId);
-      } else {
-        vapiInstance.stop();
+    function getVapiClient() {
+      if (vapi) return vapi;
+      if (window.vapiSDK && window.vapiSDK.vapi) {
+        vapi = window.vapiSDK.vapi;
       }
-    });
-  </script>
-</body>
-</html>
+      return vapi;
+    }
+
+    function setupEventListeners(client) {
+      if (!client || client._hasSetupListeners) return;
+      client._hasSetupListeners = true;
+
+      client.on('call-start', () => {
+        isCallLive = true;
+        actionBox.classList.add('calling');
+        heroCallBtn.classList.add('active-call');
+        heroBtnIcon.textContent = '⏹';
+        heroBtnText.textContent =
